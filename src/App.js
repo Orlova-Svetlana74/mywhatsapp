@@ -1,9 +1,10 @@
-import Entrance from "./components/entrance/entrance"; 
+
+import { AppRoutes } from "./page/routers";
 
 function App() {
   return (
     <div className="App">
-      <Entrance />
+      <AppRoutes />
     </div>
   );
 }

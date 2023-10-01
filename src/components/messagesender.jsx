@@ -25,5 +25,4 @@ function MessageSender() {
     </div>
   );
 }
-
 export default MessageSender;

@@ -5,18 +5,25 @@ export const whatsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'https://api.green-api.com/' }),
 
   endpoints: (build) => ({
-    getMessage: build.mutation({
+    getMessage: build.query({
       query: ({ idInstance, apiTokenInstance }) =>
-        `waInstance{{idInstance}}/receiveNotification/{{apiTokenInstance}}`, //получение уведомлений
+        `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`, //получение уведомлений
       method: 'GET',
     }),
 
     sendMessage: build.mutation({
-      query: ({ idInstance, apiTokenInstance }) =>
-        `waInstance{{idInstance}}/sendMessage/{{apiTokenInstance}}`, //отправка сообщений
-      method: 'POST',
+      query: ({ idInstance, apiTokenInstance, props }) => {
+        return {
+          url:`waInstance${idInstance}/sendMessage/${apiTokenInstance}`,
+          method: 'POST',
+          body: props
+        }
+      }
+        , //отправка сообщений
+      
+
     }),
   }),
 });
 
-export const { useGetMessageMutation, useSendMessageMutation } = whatsApi;
+export const { useSendMessageMutation, useLazyGetMessageQuery } = whatsApi;

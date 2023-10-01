@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { useGetMessageMutation } from '../redux/whatsApi';
+import { useLazyGetMessageQuery } from '../redux/whatsApi';
+import { clearSessionData } from '../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 function MessageGeter() {
   const [message, setMessage] = useState('');
-  const [getMessage, { isLoading }] = useGetMessageMutation();
+  const [getMessage, { isLoading }] = useLazyGetMessageQuery({
+    pollingInterval: 3000,
+  });
+  const navigate = useNavigate();
+
+  const exit = () => {
+    clearSessionData();
+    navigate('/entrance');
+  };
 
   const handleGetMessage = async () => {
     if (message) {
-      await getMessage({ message }); // Отправка запроса на получение сообщения
+      await getMessage(); // Отправка запроса на получение сообщения
       setMessage('');
     }
   };
@@ -21,6 +31,8 @@ function MessageGeter() {
       <button onClick={handleGetMessage} disabled={isLoading}>
         {isLoading ? 'Получение...' : 'Получить сообщение'}
       </button>
+
+      <button onClick={exit}>Выход</button>
     </div>
   );
 }
